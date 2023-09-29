@@ -209,6 +209,7 @@ void qlearn_deinit(qlearn_t *qlearn)
  */
 void qlearn_restart(qlearn_t *qlearn)
 {
+    qlearn->epsilon = 1.0f;
     qlearn->restart();
 }
 

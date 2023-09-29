@@ -8,6 +8,7 @@
 static size_t factor = 60;
 static Vector2 player_pos = {0};
 static Vector2 end_pos = {.x=4,.y=6};
+static float dist = {0};
 
 #define REWARD_CLOSE +10
 #define REWARD_FAR -10
@@ -46,7 +47,13 @@ void game_draw(void){
  * @brief Restart game.
  *
  */
-void game_restart(void);
+void game_restart(void)
+{
+    player_pos.x = 0.f;
+    player_pos.y = 0.f;
+    Vector2 dist_vec = {end_pos.x - player_pos.x, end_pos.y - player_pos.y};
+    dist = sqrt(pow(dist_vec.x, 2) + pow(dist_vec.y, 2));
+}
 
 /**
  * @brief Move snake.
@@ -73,7 +80,6 @@ void game_apply_move( uint8_t move){
     default:
         assert(0 && "unreachable");
     }
-    
 }
 
 /**
@@ -113,4 +119,13 @@ uint16_t game_get_state(void)
  *
  * @return int16_t
  */
-int16_t game_get_reward(void);
+int16_t game_get_reward(void)
+{
+    Vector2 dist_vec = {end_pos.x - player_pos.x, end_pos.y - player_pos.y};
+    float curr_dist = sqrt(pow(dist_vec.x, 2) + pow(dist_vec.y, 2));
+    if(curr_dist < dist)
+    {
+        return REWARD_CLOSE;
+    }
+    return REWARD_FAR;
+}
